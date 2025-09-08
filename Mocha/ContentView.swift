@@ -103,7 +103,7 @@ struct MainAppView: View {
             .tabItem { Label("Goals", systemImage: "target") }
             .tag(2)
 
-            // ⚙️ Settings Tab
+           /* // ⚙️ Settings Tab
             NavigationStack {
                 SettingsView(
                     viewModel: viewModel,
@@ -115,13 +115,13 @@ struct MainAppView: View {
                 .navigationBarTitleDisplayMode(.large)
             }
             .tabItem { Label("Settings", systemImage: "gearshape.fill") }
-            .tag(3)
+            .tag(3)*/
         }
         .tint(.brown) // ☕ Coffee-colored tint for selected tab and controls.
 
         // ➕ Floating action buttons (like big friendly buttons in the corner).
         .overlay(alignment: .bottomTrailing) {
-            VStack(spacing: 16) {
+            VStack(spacing: 15) {
                 // Add Money
                 FabButton(
                     systemImage: "plus",
@@ -137,7 +137,7 @@ struct MainAppView: View {
                 ) { showingQuerySheet = true }
             }
             .padding(.trailing, 20)
-            .padding(.bottom, 28)
+            .padding(.bottom, 75)
         }
 
         // 📄 Sheets (popups)
@@ -510,16 +510,6 @@ struct CoffeeJarCard: View {
                   /// “Liquid fill” overlay
                     VStack {
                         Spacer()
-                        RoundedRectangle(cornerRadius: 14)
-                            .fill(
-                                LinearGradient(
-                                    colors: [jar.category.color.opacity(0.85), jar.category.color.opacity(0.4)],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
-                            )
-                            .frame(width: 42, height: max(8, CGFloat(jar.fillPercentage) * 40))
-                            .animation(.easeInOut(duration: 0.6), value: jar.balance)
                     }
                     .frame(width: 50, height: 50)
                 }
