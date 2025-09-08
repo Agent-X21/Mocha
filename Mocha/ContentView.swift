@@ -27,11 +27,12 @@ struct ContentView: View {
     @AppStorage("darkModeEnabled") private var darkModeEnabled: Bool = true
     @AppStorage("soundEnabled") private var soundEnabled: Bool = true
     @AppStorage("hapticsEnabled") private var hapticsEnabled: Bool = true
+    @AppStorage("showOnboardingMenu") private var showOnboardingMenu: Bool = true // LINE MARKER: Onboarding Toggle
     
 
     var body: some View {
         // 👇 If you want onboarding to show first, toggle this if/else.
-        if viewModel.showingOnboarding {
+        if showOnboardingMenu && viewModel.showingOnboarding {
             OnboardingView(viewModel: viewModel)
                 .preferredColorScheme(darkModeEnabled ? .dark : .light)
                 .transition(.opacity)
@@ -1156,7 +1157,7 @@ struct OnboardingView: View {
                         VStack(spacing: 14) {
                             Image(systemName: "target")
                                 .font(.system(size: 60))
-                                .foregroundColor(.orange)
+                                .foregroundColor(.red)
                             Text("Set Your First Goal")
                                 .font(.title2.weight(.semibold))
                             TextField("Goal name (e.g., New Laptop)", text: $firstGoalName)
@@ -1169,7 +1170,7 @@ struct OnboardingView: View {
                         VStack(spacing: 14) {
                             Image(systemName: "person.fill")
                                 .font(.system(size: 60))
-                                .foregroundColor(.blue)
+                                .foregroundColor(.brown)
                             Text("Your Name")
                                 .font(.title2.weight(.semibold))
                             TextField("Name", text: $viewModel.firstName) // ✅ Save into model

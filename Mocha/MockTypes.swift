@@ -95,3 +95,4 @@ class MochaViewModel: ObservableObject {
     func processNaturalLanguageQuery(_ query: String) async -> QueryResult { QueryResult() }
 }
 */
+

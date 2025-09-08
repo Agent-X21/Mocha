@@ -36,6 +36,10 @@ class MochaViewModel: ObservableObject {
 
     // Insights
     @Published var insights: [SpendingInsight] = [SpendingInsight()]
+    
+    init() {
+        self.showingOnboarding = true
+    }
 
     // Methods (stubs)
     func addIncome(amount: Decimal) {}
