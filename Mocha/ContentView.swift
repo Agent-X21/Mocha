@@ -9,6 +9,8 @@
 //  - Adds simple, kid-friendly comments throughout
 //
 
+// Fixes for ambiguous MochaViewModel and .large errors
+
 import SwiftUI
 import UniformTypeIdentifiers // 📦 For drag & drop types like UTType.text
 
@@ -74,7 +76,7 @@ struct MainAppView: View {
             NavigationStack {
                 DashboardView(viewModel: viewModel)
                     .navigationTitle("Dashboard")
-                    .navigationBarTitleDisplayMode(.large)
+                    .navigationBarTitleDisplayMode(NavigationBarItem.TitleDisplayMode.large)
             }
             .tabItem { Label("Dashboard", systemImage: "house.fill") }
             .tag(0)
@@ -90,7 +92,7 @@ struct MainAppView: View {
                     }
                 )
                 .navigationTitle("Jars")
-                .navigationBarTitleDisplayMode(.large)
+                .navigationBarTitleDisplayMode(NavigationBarItem.TitleDisplayMode.large)
             }
             .tabItem { Label("Jars", systemImage: "cup.and.saucer.fill") }
             .tag(1)
@@ -99,7 +101,7 @@ struct MainAppView: View {
             NavigationStack {
                 GoalsView(viewModel: viewModel)
                     .navigationTitle("Financial Goals")
-                    .navigationBarTitleDisplayMode(.large)
+                    .navigationBarTitleDisplayMode(NavigationBarItem.TitleDisplayMode.large)
             }
             .tabItem { Label("Goals", systemImage: "target") }
             .tag(2)
@@ -113,7 +115,7 @@ struct MainAppView: View {
                     hapticsEnabled: $hapticsEnabled
                 )
                 .navigationTitle("Settings")
-                .navigationBarTitleDisplayMode(.large)
+                .navigationBarTitleDisplayMode(NavigationBarItem.TitleDisplayMode.large)
             }
             .tabItem { Label("Settings", systemImage: "gearshape.fill") }
             .tag(3)*/
@@ -202,7 +204,16 @@ struct FabButton: View {
 //
 struct DashboardView: View {
     @ObservedObject var viewModel: MochaViewModel
-    @State private var firstName = ""
+
+    // Stub properties to avoid errors if MochaViewModel is incomplete
+    // Remove these if real MochaViewModel has them
+    /*
+    var totalBalance: Decimal { 0 }
+    var jars: [CoffeeJar] { [] }
+    var goals: [FinancialGoal] { [] }
+    var insights: [SpendingInsight] { [] }
+    var firstName: String { "" }
+    */
 
     var body: some View {
         ScrollView {
@@ -245,14 +256,16 @@ struct DashboardView: View {
     // ⏰ Simple greeting based on the hour.
     private var greeting: String {
         let hour = Calendar.current.component(.hour, from: Date())
+        let name = viewModel.firstName.isEmpty ? "" : " \(viewModel.firstName)"
         switch hour {
-        case 5..<12: return "Good Morning, \($firstName)"
-        case 12..<17: return "Good Afternoon, \($firstName)"
-        case 17..<22: return "Good Evening, \($firstName)"
-        default: return "Good Night, \($firstName)"
+        case 5..<12: return "Good Morning,\(name)"
+        case 12..<17: return "Good Afternoon,\(name)"
+        case 17..<22: return "Good Evening,\(name)"
+        default: return "Good Night,\(name)"
         }
     }
 }
+
 
 // MARK: - QuickStatCard
 //
@@ -825,7 +838,7 @@ struct AddMoneyView: View {
             }
             .padding()
             .navigationTitle("Add Money")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(NavigationBarItem.TitleDisplayMode.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") { dismiss() }
@@ -868,7 +881,7 @@ struct CreateGoalView: View {
             }
             .padding()
             .navigationTitle("New Goal")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(NavigationBarItem.TitleDisplayMode.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") { dismiss() }
@@ -913,7 +926,7 @@ struct AddProgressView: View {
             }
             .padding()
             .navigationTitle("Add Progress")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(NavigationBarItem.TitleDisplayMode.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") { dismiss() }
@@ -980,7 +993,7 @@ struct TransferView: View {
             }
             .padding()
             .navigationTitle("Transfer")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(NavigationBarItem.TitleDisplayMode.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") { dismiss() }
@@ -1076,7 +1089,7 @@ struct NaturalLanguageQueryView: View {
             }
             .padding()
             .navigationTitle("AI Assistant")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(NavigationBarItem.TitleDisplayMode.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") { dismiss() }
@@ -1096,7 +1109,6 @@ struct OnboardingView: View {
     @State private var initialBalanceText = ""
     @State private var firstGoalName = ""
     @State private var firstGoalAmountText = ""
-    @State private var firstName = ""
 
     private let steps = ["Welcome", "Balance", "First Goal", "Name", "Ready"]
 
@@ -1155,12 +1167,12 @@ struct OnboardingView: View {
                         }
                     case 3:
                         VStack(spacing: 14) {
-                            Image(systemName: "target")
+                            Image(systemName: "person.fill")
                                 .font(.system(size: 60))
-                                .foregroundColor(.orange)
+                                .foregroundColor(.blue)
                             Text("Your Name")
                                 .font(.title2.weight(.semibold))
-                            TextField("Name", text: $firstName)
+                            TextField("Name", text: $viewModel.firstName) // ✅ Save into model
                                 .textFieldStyle(LiquidGlassTextFieldStyle())
                         }
                     default:
@@ -1222,6 +1234,8 @@ struct OnboardingView: View {
             return !initialBalanceText.isEmpty
         case 2:
             return !firstGoalName.isEmpty && !firstGoalAmountText.isEmpty
+        case 3:
+            return !viewModel.firstName.isEmpty
         default:
             return true
         }

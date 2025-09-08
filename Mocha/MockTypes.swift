@@ -61,6 +61,8 @@ struct QueryResult {
     var suggestedActions: [String] = ["Track weekly income."]
 }
 
+// MochaViewModel mock disabled for live app build (see MochaViewModel.swift)
+/*
 // MARK: - MochaViewModel (mock)
 class MochaViewModel: ObservableObject {
     // Onboarding
@@ -92,3 +94,4 @@ class MochaViewModel: ObservableObject {
     func transfer(from: CoffeeJar, to: CoffeeJar, amount: Decimal) {}
     func processNaturalLanguageQuery(_ query: String) async -> QueryResult { QueryResult() }
 }
+*/
