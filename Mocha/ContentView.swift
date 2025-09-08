@@ -25,6 +25,7 @@ struct ContentView: View {
     @AppStorage("darkModeEnabled") private var darkModeEnabled: Bool = true
     @AppStorage("soundEnabled") private var soundEnabled: Bool = true
     @AppStorage("hapticsEnabled") private var hapticsEnabled: Bool = true
+    
 
     var body: some View {
         // 👇 If you want onboarding to show first, toggle this if/else.
@@ -201,6 +202,7 @@ struct FabButton: View {
 //
 struct DashboardView: View {
     @ObservedObject var viewModel: MochaViewModel
+    @State private var firstName = ""
 
     var body: some View {
         ScrollView {
@@ -244,10 +246,10 @@ struct DashboardView: View {
     private var greeting: String {
         let hour = Calendar.current.component(.hour, from: Date())
         switch hour {
-        case 5..<12: return "Good Morning"
-        case 12..<17: return "Good Afternoon"
-        case 17..<22: return "Good Evening"
-        default: return "Good Night"
+        case 5..<12: return "Good Morning, \($firstName)"
+        case 12..<17: return "Good Afternoon, \($firstName)"
+        case 17..<22: return "Good Evening, \($firstName)"
+        default: return "Good Night, \($firstName)"
         }
     }
 }
@@ -524,9 +526,9 @@ struct CoffeeJarCard: View {
                         .font(.title2.weight(.bold))
                         .foregroundColor(.primary)
 
-                    Text("\(Int(jar.fillPercentage * 100))% full")
+                    /*Text("\(Int(jar.fillPercentage * 100))% full")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.secondary)*/
                 }
             }
             .padding(18)
@@ -1094,8 +1096,9 @@ struct OnboardingView: View {
     @State private var initialBalanceText = ""
     @State private var firstGoalName = ""
     @State private var firstGoalAmountText = ""
+    @State private var firstName = ""
 
-    private let steps = ["Welcome", "Balance", "First Goal", "Ready"]
+    private let steps = ["Welcome", "Balance", "First Goal", "Name", "Ready"]
 
     var body: some View {
         ZStack {
@@ -1148,6 +1151,16 @@ struct OnboardingView: View {
                                 .textFieldStyle(LiquidGlassTextFieldStyle())
                             TextField("Target amount", text: $firstGoalAmountText)
                                 .keyboardType(.decimalPad)
+                                .textFieldStyle(LiquidGlassTextFieldStyle())
+                        }
+                    case 3:
+                        VStack(spacing: 14) {
+                            Image(systemName: "target")
+                                .font(.system(size: 60))
+                                .foregroundColor(.orange)
+                            Text("Your Name")
+                                .font(.title2.weight(.semibold))
+                            TextField("Name", text: $firstName)
                                 .textFieldStyle(LiquidGlassTextFieldStyle())
                         }
                     default:
