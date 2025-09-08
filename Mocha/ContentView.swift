@@ -499,10 +499,15 @@ struct CoffeeJarCard: View {
             VStack(spacing: 14) {
                 // ☕ Jar icon with a mini “liquid” fill
                 ZStack {
-                    Image(systemName: "cup.and.saucer.fill")
-                        .font(.system(size: 50))
-                        .foregroundColor(jar.category.color)
+                    Image("jar")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(
+                            width: UIFont.preferredFont(forTextStyle: .body).pointSize * 6,
+                            height: UIFont.preferredFont(forTextStyle: .body).pointSize * 6
+                        )
 
+                  /// “Liquid fill” overlay
                     VStack {
                         Spacer()
                         RoundedRectangle(cornerRadius: 14)
@@ -519,6 +524,7 @@ struct CoffeeJarCard: View {
                     .frame(width: 50, height: 50)
                 }
 
+                // Jar info
                 VStack(spacing: 6) {
                     Text(jar.name)
                         .font(.headline.weight(.semibold))
@@ -541,7 +547,15 @@ struct CoffeeJarCard: View {
                     .shadow(color: .black.opacity(0.1), radius: 12, x: 0, y: 6)
             )
         }
-        .buttonStyle(.plain)
+        .buttonStyle(NoBackgroundButtonStyle()) // Custom style to remove accent pill
+    }
+}
+
+// Custom ButtonStyle to remove accent pill and keep optional tap feedback
+struct NoBackgroundButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.7 : 1.0) // optional press effect
     }
 }
 
