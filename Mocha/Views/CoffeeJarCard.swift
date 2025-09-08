@@ -39,8 +39,8 @@ struct CoffeeJarCard: View {
                                     endPoint: .bottom
                                 )
                             )
-                            .frame(width: 42, height: max(8, CGFloat(jar.fillPercentage) * 40))
-                            .animation(.easeInOut(duration: 0.6), value: jar.balance)
+                            .frame(width: 42, height: max(8, CGFloat(jar.fillPercentage.doubleValue) * 40))
+                            .animation(.easeInOut(duration: 0.6), value: jar.fillPercentage.doubleValue)
                     }
                     .frame(width: 50, height: 50)
                 }
@@ -54,7 +54,7 @@ struct CoffeeJarCard: View {
                         .font(.title2.weight(.bold))
                         .foregroundColor(.primary)
 
-                    Text("\(Int(jar.fillPercentage * 100))% full")
+                    Text("\(Int(jar.fillPercentage.doubleValue * 100))% full")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -74,6 +74,10 @@ struct CoffeeJarCard: View {
 // MARK: - Preview
 #Preview {
     CoffeeJarCard(
-        jar: CoffeeJar(name: "Emergency", balance: 120, category: .emergency, fillPercentage: 0.6)
+        jar: CoffeeJar(name: "Emergency", category: .emergency, balance: 120)
     ) {}
+}
+
+extension Decimal {
+    var doubleValue: Double { NSDecimalNumber(decimal: self).doubleValue }
 }

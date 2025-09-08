@@ -86,7 +86,7 @@ struct QuickStatCard: View {
                         .fill(Color.gray.opacity(0.2))
                         .frame(height: 8)
 
-                    let width = max(8, CGFloat(jar.fillPercentage) * geo.size.width)
+                    let width = max(8, CGFloat(truncating: jar.fillPercentage as NSNumber) * geo.size.width)
                     RoundedRectangle(cornerRadius: 6)
                         .fill(
                             LinearGradient(
@@ -147,7 +147,7 @@ struct GoalProgressCard: View {
                         .fill(Color.gray.opacity(0.2))
                         .frame(height: 6)
 
-                    let width: CGFloat = max(6, CGFloat(goal.progress) * 200)
+                    let width: CGFloat = max(6, CGFloat(truncating: goal.progress as NSNumber) * 200)
                     RoundedRectangle(cornerRadius: 4)
                         .fill(LinearGradient(colors: [.green, .mint], startPoint: .leading, endPoint: .trailing))
                         .frame(width: width, height: 6)
@@ -241,3 +241,4 @@ struct InsightCard: View {
         }
     }
 }
+

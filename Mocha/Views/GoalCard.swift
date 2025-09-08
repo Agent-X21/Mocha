@@ -45,7 +45,7 @@ struct GoalCard: View {
                     .frame(width: 80, height: 80)
 
                 Circle()
-                    .trim(from: 0, to: goal.progress)
+                    .trim(from: 0, to: CGFloat(truncating: goal.progress as NSNumber))
                     .stroke(
                         LinearGradient(colors: [.green, .mint], startPoint: .topLeading, endPoint: .bottomTrailing),
                         style: StrokeStyle(lineWidth: 8, lineCap: .round)
@@ -55,7 +55,7 @@ struct GoalCard: View {
                     .animation(.easeInOut(duration: 0.6), value: goal.currentAmount)
 
                 VStack {
-                    Text("\(Int(goal.progress * 100))%")
+                    Text("\(Int((goal.progress as NSDecimalNumber).doubleValue * 100))%")
                         .font(.caption.weight(.bold))
                     Text(goal.currentAmount, format: .currency(code: "USD"))
                         .font(.caption2)
@@ -80,3 +80,4 @@ struct GoalCard: View {
 #Preview {
     GoalCard(goal: FinancialGoal.example, viewModel: MochaViewModel())
 }
+

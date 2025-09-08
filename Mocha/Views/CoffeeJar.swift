@@ -14,11 +14,11 @@ struct CoffeeJar: Identifiable {
     let id = UUID()
     let name: String
     let category: JarCategory
-    var balance: Double
-    var goalAmount: Double?
+    var balance: Decimal
+    var goalAmount: Decimal?
 
     // Fill percentage for progress bars (0 to 1)
-    var fillPercentage: Double {
+    var fillPercentage: Decimal {
         guard let goal = goalAmount, goal > 0 else { return 0.0 }
         return min(balance / goal, 1.0)
     }
@@ -31,6 +31,7 @@ enum JarCategory: String, CaseIterable {
     case fun
     case bills
     case investments
+    case emergency
 
     var icon: String {
         switch self {
@@ -39,6 +40,7 @@ enum JarCategory: String, CaseIterable {
         case .fun:          return "gamecontroller.fill"
         case .bills:        return "doc.text.fill"
         case .investments:  return "chart.bar.fill"
+        case .emergency:    return "exclamationmark.triangle.fill"
         }
     }
 
@@ -49,6 +51,7 @@ enum JarCategory: String, CaseIterable {
         case .fun:          return .pink
         case .bills:        return .red
         case .investments:  return .blue
+        case .emergency:    return .orange
         }
     }
 
@@ -59,6 +62,7 @@ enum JarCategory: String, CaseIterable {
         case .fun:          return "Leisure and entertainment."
         case .bills:        return "Monthly recurring expenses."
         case .investments:  return "Funds for growth and wealth."
+        case .emergency:    return "Funds for unexpected expenses."
         }
     }
 }

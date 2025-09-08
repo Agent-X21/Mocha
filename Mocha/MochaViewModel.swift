@@ -9,7 +9,7 @@ import Combine
 // 🧠 The app’s brain
 class MochaViewModel: ObservableObject {
     // Onboarding
-    @Published var showingOnboarding: Bool = true
+    @Published var showingOnboarding: Bool = false
 
     // Jars
     @Published var jars: [CoffeeJar] = []
@@ -38,7 +38,7 @@ class MochaViewModel: ObservableObject {
     func addIncome(amount: Decimal) {
         // Simple demo: put in first jar or create default jar
         if jars.isEmpty {
-            let defaultJar = CoffeeJar(name: "Main Jar", balance: amount, category: .defaultCategory)
+            let defaultJar = CoffeeJar(name: "Main Jar", category: .savings, balance: amount)
             jars.append(defaultJar)
         } else {
             jars[0].balance += amount
@@ -47,7 +47,7 @@ class MochaViewModel: ObservableObject {
     }
 
     func addGoal(name: String, target: Decimal) {
-        let goal = FinancialGoal(name: name, targetAmount: target)
+        let goal = FinancialGoal(name: name, targetAmount: target, category: .shortTerm)
         goals.append(goal)
     }
 
@@ -75,7 +75,7 @@ class MochaViewModel: ObservableObject {
     private func updateInsights() {
         // Generate dummy insights
         insights = jars.map { jar in
-            SpendingInsight(type: .savingsOpportunity, severity: .info, message: "Consider adding more to \(jar.name)", suggestedAction: "Add money to \(jar.name)")
+            SpendingInsight(message: "Consider adding more to \(jar.name)", type: .savingsOpportunity, severity: .info, suggestedAction: "Add money to \(jar.name)")
         }
     }
 
@@ -83,3 +83,4 @@ class MochaViewModel: ObservableObject {
         jars.reduce(0) { $0 + $1.balance }
     }
 }
+

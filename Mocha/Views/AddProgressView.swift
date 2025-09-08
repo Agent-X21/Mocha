@@ -60,7 +60,7 @@ struct AddProgressView: View {
 #Preview {
     // Example usage with mock data
     AddProgressView(
-        goal: FinancialGoal(name: "New Laptop", targetAmount: 1200, currentAmount: 400, category: .monthly),
+        goal: FinancialGoal(name: "New Laptop", targetAmount: 1200, category: .shortTerm),
         viewModel: MochaViewModel()
     )
 }
